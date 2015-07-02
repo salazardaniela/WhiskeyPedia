@@ -1,4 +1,5 @@
 //https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi/related
+//http://cocktails.wikia.com/wiki/Cocktails_Wiki
 define(
     [
         'jquery',
