@@ -16,87 +16,85 @@ define(
 
         'use strict';
 
-        // var whiskey;
+        // var ModelWiki = Backbone.Model.extend({
+        //     defaults: {
+        //         "text": 'some',
+        //         "href": '#'
+        //     }
+        // });
 
-        // var modelWiki = Backbone.Model.extend({});
+        // var CollectionWiki = Backbone.Collection.extend({
 
-        // var viewWiki = Backbone.View.extend({
+        //     model: ModelWiki,
 
-        //     el: "#whiskey-content",
+        //     url: "http://cocktails.wikia.com/api/v1/"
 
-        //     template: _.template( $("#main-template").html()),
+        //     // "parse": function(data) {
+        //     //     return data.data.navData.navigation.wiki;
+        //     // }
+        // });
 
-        //     render: function() {
-        //         console.log('wiki');
-        //         this.$el.html(this.model.attributes);
+        // var viewCocktail = Backbone.View.extend({
 
+        //     tagName: 'li',
+
+        //     "template": _.template($('#input-search').html()),
+
+        //     render: function(event) {
+        //         // $(this.el).html(this.template(this.model.attributes));
         //         return this;
         //     }
         // });
 
-        // var viewWikiMain = Backbone.View.extend({
+        // var ViewListWiki = Backbone.View.extend({
 
-        //     el: "#results-data",
+        //     "el": "#cocktails-content",
+            
+        //     tagName: 'ul',
 
-        //     initialize: function(start) {
-        //         whiskey = new collectionWiki();
-        //         whiskey.fetch();
-        //         console.log('hay');
-        //         console.log( whiskey);
-
-        //         // this.whiskey = new collectionWiki(start);
+        //     initialize: function(){
         //         this.render();
         //     },
 
-        //     render: function() {
-        //         console.log('Fuck');
-        //         console.log( whiskey );
+        //     render: function(event) {
+        //         _.each(this.model.models, function(cocktail) {
+        //             // console.log(cocktail);
+        //             var childView = new viewCocktail({"model": cocktail});
+        //             $(this.el).append(childView.render().el);
 
-        //         whiskey.each(function(item) {
+        //         },this);
 
-        //         console.log(item);
-        //             renderEach(item);
-        //         }, this);
-        //     },
-
-        //     renderEach: function(item) {
-        //         console.log('just');
-        //         var whiskeyGlass = new viewWiki({
-        //             model: item
-        //         });
-        //         whiskeyGlass.fetch(); 
-        //         this.$el.append(whiskeyGlass.render)
+        //         return this.el;
         //     }
-
         // });
 
-        // var collectionWiki = Backbone.Collection.extend({
-        //     "model": modelWiki,
-            
-        //     "url": "http://cocktails.wikia.com/api/v1/Mercury/WikiVariables/",
+        // var viewWiki = Backbone.View.extend({
 
-        //     "parse": function(data) {
-        //         return data.data.navData.navigation.wiki;
-        //     } 
+        //     template: _.template($('#simple-template').html()),
+
+        //     render: function(event) {
+        //         $(this.el).html(this.template(this.model.toJSON()));
+        //         return this;
+        //     }
+        // }); 
+
+        // var wikeList = new CollectionWiki();
+
+        // wikeList.fetch({
+        //     "success": function() {       
+        //         var viewList = new ViewListWiki({"model": wikeList});
+        //         viewList.render();
+        //     }
         // });
-
-        // // var whiskey = new collectionWiki();
-
-        // // whiskey.fetch();     
-
-        // // console.log( whiskey );
-        // var vs = new viewWikiMain();
-        // vs.setElement($('#whiskey-content')).render();
 
         var ModelWiki = Backbone.Model.extend({
-            urlRoot: "http://cocktails.wikia.com/api/v1/Mercury/WikiVariables/",
-            initialize: function(data) {
-                console.log(data);
-            },
-
             defaults: {
-                "text": 'some',
-                "href": '#'
+                "baseUrlSearch": "http://cocktails.wikia.com/api/v1/Search/List",
+                "keywords": " ",
+                "limit": 5,
+                "minArticleQuality": 10,
+                "batch": 1,
+                "namespaces": "0%2C14"
             }
         });
 
@@ -104,68 +102,82 @@ define(
 
             model: ModelWiki,
 
-            url: "http://cocktails.wikia.com/api/v1/Mercury/WikiVariables/",
+            url: function() {
+                var baseData = this.models[0].attributes,
+                    baseUrl = baseData.baseUrlSearch,
+                    keywords = "?query=" + baseData.keywords,
+                    limit = "&limit=" + baseData.limit,
+                    minArticleQuality = "&minArticleQuality=" + baseData.minArticleQuality,
+                    batch = "&batch=" + baseData.batch,
+                    namespaces = "&namespaces=" + baseData.namespaces;
 
-            "parse": function(data) {
-                return data.data.navData.navigation.wiki;
-                console.log(this)
+                console.log(keywords);
+                return baseUrl+keywords+limit+minArticleQuality+batch+namespaces
+            }
+
+        });
+
+        var ViewWiki = Backbone.View.extend({
+            "el": "#cocktails-content",
+
+            initialize: function() {
+                console.log('initialized');
             }
         });
 
-        var ViewListWiki = Backbone.View.extend({
+        var ModelSearch = Backbone.Model.extend({
+            defaults: {
+                "placeholder": "Search your Cocktail"
+            }
+        });
 
-            tagName: 'ul',
+        var ViewSearch = Backbone.View.extend({
+            "el": "#search-wrapper",
 
-            initialize: function(){
-                console.log(this.model.model);
-                this.render();
+            "template": _.template($('#input-search').html()),
+
+            events: {
+                'keyup': 'processKey'
             },
 
-            render: function(event) {
-                $(this.el).html(this.el);
-
-                _.each(this.model.models, function(cocktail) {
-                    $(this.el).append(new viewCocktail({model: ModelWiki}).render().el);
-                },this);
-                return this;
-            }
-        });
-
-        var viewCocktail = Backbone.View.extend({
-
-            tagName: 'li',
-
-            render: function(event) {
-                $(this.el).html(this.template(this.model.toJSON()));
-                return this;
-            }
-        });
-
-        var viewWiki = Backbone.View.extend({
-
-            template: _.template($('#simple-template').html()),
-
-            render: function(event) {
-                $(this.el).html(this.template(this.model.toJSON()));
-                return this;
-            }
-        }); 
-
-        var RouterWiki = Backbone.Router.extend({
-            routes: {
-                "": "wiki"
+            "initialize": function() {
+                var data = this.model.attributes;
+                this.render(data);
             },
-            wiki: function(page) {
-                var wikeList = new CollectionWiki();
-                console.log(wikeList);
-                wikeList.fetch({
-                    success: function(){
-                        $('#cocktails-content').html(new ViewListWiki({model: wikeList}).el);
+
+            render: function(data) {
+                $(this.el).html(this.template(data));
+                return this;
+            },
+
+            processKey: function(e) {
+                if(e.which === 13) {
+                    var keywords = $(e.currentTarget).children().val();
+                    this.submit(keywords);
+                }
+            },
+
+            submit: function(keywords) {
+                var getSearch = new CollectionWiki({
+                    "keywords": keywords
+                });
+
+                console.log(getSearch);
+
+                getSearch.fetch({
+                    "success": function() {
+                        var searchRequest = new ViewWiki({
+                            "model": getSearch
+                        })
                     }
                 });
-             }
+            }
         });
 
-        var app = new RouterWiki();
-        Backbone.history.start();
+        var mainModelSearch = new ModelSearch({});
+
+        var mainSearch = new ViewSearch({
+            "model": mainModelSearch
+        })
+
     });
