@@ -59,17 +59,14 @@
 			            <% }); %>
 		        	</div>
 			    <% } %>
-			    <% if(sections[1]){%>
-			    	<h2><%= sections[1].title %></h2>
-			        <ul>
-			        	<%= sections[1].content[0].elements %>
-			        	<% _.each( sections[1].content[0].elements, function( listItem ){ %>
 
-			        	
-
-			        	<% }); %>
-			        </ul>
-		        <% } %>
+		        <% _.each( sections, function(section){ %>
+	        		<% _.each( section.content, function(content){ %>
+	        			<% _.each( content.elements, function(element){ %>
+	        				<li><%- element.text %></li>
+	        			<% }); %>
+	        		<% }); %>
+		        <% }); %>
 			</div>
 		</div>
 	</script>

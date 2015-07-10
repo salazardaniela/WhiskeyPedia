@@ -69,6 +69,7 @@ define(
 
                 show.fetch({
                     "success": function(data) {
+                        debugger
                         var overlay = new ViewOverlay({
                             "model": show
                         })
@@ -211,6 +212,7 @@ define(
 
                 show.fetch({
                     "success": function(data) {
+                        debugger
                         var overlay = new ViewOverlay({
                             "model": show
                         })
