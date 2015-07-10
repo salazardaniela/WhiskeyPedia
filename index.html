@@ -49,8 +49,27 @@
 			<div class="overlay-layer"></div>
 			<div class="overlay-content">
 				<a class="close" href="javascript:;">x</a>
-				<h1><%= title %></h1>
-				<p><%= abstract %></p>
+				<h1><%= sections[0].title %></h1>
+				<% if(sections[0]){%>
+					<div>
+						<% _.each( sections[0].content, function( listItem ){ %>
+			                <p>
+			                    <%- listItem.text %>
+			                </p>
+			            <% }); %>
+		        	</div>
+			    <% } %>
+			    <% if(sections[1]){%>
+			    	<h2><%= sections[1].title %></h2>
+			        <ul>
+			        	<%= sections[1].content[0].elements %>
+			        	<% _.each( sections[1].content[0].elements, function( listItem ){ %>
+
+			        	
+
+			        	<% }); %>
+			        </ul>
+		        <% } %>
 			</div>
 		</div>
 	</script>

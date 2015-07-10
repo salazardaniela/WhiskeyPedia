@@ -277,7 +277,6 @@ define(
                 var number = this.model.attributes.id;
                 number = number.toString();
                 var data = this.model.attributes;
-                console.log(this);
                 this.render(data);
             },
 
