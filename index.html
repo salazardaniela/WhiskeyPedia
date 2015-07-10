@@ -8,14 +8,51 @@
     
 </head>
 <body>
-	
-	<div id="search-wrapper"></div>
+	<span class="bg"></span>
 
-	<div id="cocktails-content"></div>
+	<div class="content">
+		<div id="search-wrapper"></div>
+		<div id="cocktails-results"></div>
+		<div id="cocktails-content"></div>
+	</div>
+	
+	<div id="overlayRegion"></div>
+
 	
 	<script id="input-search" type="text/template">
 		<input type="search" placeholder="<%= placeholder %>" id="search">
 	</script>
 
+	<script id="each-popular" type="text/template">
+		<a class="title" href="javascript:;"></a>
+		<h1><%= title %></h1>
+		<figure>
+			<img src="<%= thumbnail %>" />
+		</figure>
+		<p><%= abstract %></p>
+	</script>
+
+	<script id="error-list" type="text/template">
+		<p><%= error %></p>
+	</script>
+
+	<script id="success-list" type="text/template">
+		<h2>
+			<a class="title" data-id="<%= id %>" href="javascript:;">
+				<%= title %>
+			</a>
+		</h2>
+	</script>
+	
+	<script id="overlay" type="text/template">
+		<div>
+			<div class="overlay-layer"></div>
+			<div class="overlay-content">
+				<a class="close" href="javascript:;">x</a>
+				<h1><%= title %></h1>
+				<p><%= abstract %></p>
+			</div>
+		</div>
+	</script>
 </body>
 </html>
